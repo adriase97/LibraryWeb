@@ -1,0 +1,57 @@
+﻿@using Core.DTOs
+@model BookDTO
+
+@{
+    ViewData["Title"] = "Book Details";
+}
+
+<h2 class="text-center my-4">@ViewData["Title"]</h2>
+
+<div class="card shadow-lg">
+    <div class="card-header bg-primary text-white">
+        <h4>@Model.Title</h4>
+    </div>
+    <div class="card-body">
+        <p><strong>Author:</strong> @Model.Author.Name</p>
+        <p><strong>Genre:</strong> @Model.Genre</p>
+        <p><strong>Publication Year:</strong> @Model.PublicationYear</p>
+        <p><strong>ISBN:</strong> @Model.ISBN</p>
+        <p><strong>Pages:</strong> @Model.Pages</p>
+        <p><strong>Price:</strong> @Model.Price.ToString("C")</p>
+
+        <h5 class="mt-3">Publishers</h5>
+
+        @if (Model.BookPublishers.Any())
+        {
+            <table class="table table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Publisher Name</th>
+                        <th>Published Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var bookPublisher in Model.BookPublishers)
+                    {
+                        <tr>
+                            <td>@bookPublisher.Publisher.Name</td>
+                            <td>@bookPublisher.PublishedDate.ToShortDateString()</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p class="text-muted">This book has no publishers listed yet.</p>
+        }
+    </div>
+
+    <div class="card-footer">
+        @if (!User.IsInRole("ViewAuthorsBooks") && !User.HasClaim("BooksEdit", "false"))
+        {
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+        }       
+        <a asp-action="Index" class="btn btn-secondary">Back to list</a>
+    </div>
+</div>

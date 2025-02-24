@@ -1,0 +1,39 @@
+﻿@using Web.ViewModels
+@model RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card shadow-sm" style="width: 100%; max-width: 400px;">
+        <div class="card-header text-center bg-success text-white">
+            <h4 class="mb-0">Register</h4>
+        </div>
+        <div class="card-body">
+            <form method="post" class="d-grid gap-3">
+                @Html.AntiForgeryToken()
+
+                <div class="form-group">
+                    <label for="UserName">Username</label>
+                    <input type="text" class="form-control" id="UserName" name="UserName" required placeholder="Enter your username" />
+                </div>
+
+                <div class="form-group">
+                    <label for="Password">Password</label>
+                    <input type="password" class="form-control" id="Password" name="Password" required placeholder="Enter your password" />
+                </div>
+
+                <div class="form-group">
+                    <label for="ConfirmPassword">Confirm Password</label>
+                    <input type="password" class="form-control" id="ConfirmPassword" name="ConfirmPassword" required placeholder="Confirm your password" />
+                </div>
+
+                <button type="submit" class="btn btn-success btn-block">Register</button>
+
+                <a href="/Account/Login" class="btn btn-link text-center">Already have an account? Login here</a>
+            </form>
+        </div>
+    </div>
+</div>
+

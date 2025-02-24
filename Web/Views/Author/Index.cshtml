@@ -1,0 +1,83 @@
+﻿@using Web.ViewModels
+@model IEnumerable<AuthorViewModel>
+
+@{
+    ViewData["Title"] = "List of Authors";
+}
+
+<h2 class="text-center my-4">@ViewData["Title"]</h2>
+
+@if (!User.IsInRole("ViewAuthorsBooks") && !User.HasClaim("AuthorsCreate", "false"))
+{
+    <div class="mb-3">
+        <a asp-action="Create" class="btn btn-success">Add Author</a>
+    </div>
+}
+
+<div class="mb-3">
+    <input type="text" id="searchBox" class="form-control" placeholder="Search by name..." />
+</div>
+
+<div id="authorsTableContainer">
+    @await Html.PartialAsync("_AuthorsTable", Model)
+</div>
+
+@await Html.PartialAsync("Modals/_DeleteAuthorModal")
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+
+    <script>
+        var authorIdToDelete;
+
+        function openDeleteAuthorModal(authorId, authorName) {
+            authorIdToDelete = authorId;
+            $('#authorName').text(authorName);
+            $('#deleteAuthorModal').modal('show');
+        }
+
+        $("#confirmDeleteAuthor").click(function () {
+            $.ajax({
+                url: '/Author/Delete/' + authorIdToDelete,
+                type: 'DELETE',
+                success: function (response) {
+                    if (response.success) {
+                        $('#deleteAuthorModal').modal('hide');
+                        location.reload();
+                    } else {
+                        alert("Error: " + response.message);
+                    }
+                },
+                error: function (xhr) {
+                    alert("An error occurred while deleting the author.");
+                    console.log(xhr.responseText);
+                }
+            });
+        });
+
+        $(document).ready(function () {
+            $("#authorsTable").DataTable({
+                destroy: true,
+                searching: false
+            });
+
+            $("#searchBox").on("keyup", function () {
+                let searchValue = $(this).val();
+                $.ajax({
+                    url: "@Url.Action("Index", "Author")",
+                    type: "GET",
+                    data: { name: searchValue },
+                    success: function (data) {
+                        $("#authorsTableContainer").html(data);
+                        $("#authorsTable").DataTable({
+                            destroy: true,
+                            searching: false
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}

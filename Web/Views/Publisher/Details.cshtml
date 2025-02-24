@@ -1,0 +1,43 @@
+﻿@using Core.DTOs
+@model PublisherDTO
+
+@{
+    ViewData["Title"] = "Publisher Details";
+}
+
+<h2 class="text-center my-4">@ViewData["Title"]</h2>
+
+<div class="card shadow-lg">
+    <div class="card-header bg-primary text-white">
+        <h4>@Model.Name</h4>
+    </div>
+    <div class="card-body">
+        <p><strong>Country:</strong> @Model.Country</p>
+        <p><strong>Founded Year:</strong> @Model.FoundedYear</p>
+        <p><strong>Website:</strong> @Model.Website</p>
+
+        @if (Model.BookPublishers.Any())
+        {
+            <h5 class="mt-3">Published Books</h5>
+            <ul class="list-group">
+                @foreach (var bookPublisher in Model.BookPublishers)
+                {
+                    <li class="list-group-item">
+                        <strong>@bookPublisher.Book.Author.Name</strong> - <em>@bookPublisher.Book.Title</em> (@bookPublisher.PublishedDate.ToShortDateString())
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p class="text-muted">This publisher has no books listed yet.</p>
+        }
+    </div>
+    <div class="card-footer">
+        @if (!User.HasClaim("PublishersEdit", "false"))
+        {
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+        }
+        <a asp-action="Index" class="btn btn-secondary">Back to list</a>
+    </div>
+</div>

@@ -1,0 +1,91 @@
+﻿@using Web.ViewModels
+@model IEnumerable<PublisherViewModel>
+
+@{
+    ViewData["Title"] = "List of Publishers";
+}
+
+<h2 class="text-center my-4">@ViewData["Title"]</h2>
+
+@if (!User.HasClaim("PublishersCreate", "false"))
+{
+    <div class="mb-3">
+        <a asp-action="Create" class="btn btn-success">Add Publisher</a>
+    </div>
+}
+
+<div class="mb-3 row">
+    <div class="col-md-6">
+        <input type="text" id="searchName" class="form-control" placeholder="Search by name..." />
+    </div>
+    <div class="col-md-6">
+        <input type="text" id="searchCountry" class="form-control" placeholder="Search by country..." />
+    </div>
+</div>
+
+
+<div id="publishersTableContainer">
+    @await Html.PartialAsync("_PublishersTable", Model)
+</div>
+
+@await Html.PartialAsync("Modals/_DeletePublisherModal")
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+
+    <script>
+        var publisherIdToDelete;
+
+        function openDeletePublisherModal(publisherId, publisherName) {
+            publisherIdToDelete = publisherId;
+            $('#publisherName').text(publisherName);
+            $('#deletePublisherModal').modal('show');
+        }
+
+        $("#confirmDeletePublisher").click(function () {
+            $.ajax({
+                url: '/Publisher/Delete/' + publisherIdToDelete,
+                type: 'DELETE',
+                success: function (response) {
+                    if (response.success) {
+                        $('#deletePublisherModal').modal('hide');
+                        location.reload();
+                    } else {
+                        alert("Error: " + response.message);
+                    }
+                },
+                error: function (xhr) {
+                    alert("An error occurred while deleting the publisher.");
+                    console.log(xhr.responseText);
+                }
+            });
+        });
+
+        $(document).ready(function () {
+            function filterPublishers() {
+                let nameValue = $("#searchName").val();
+                let countryValue = $("#searchCountry").val();
+
+                $.ajax({
+                    url: "@Url.Action("Index", "Publisher")",
+                    type: "GET",
+                    data: { name: nameValue, country: countryValue },
+                    success: function (data) {
+                        $("#publishersTableContainer").html(data);
+                        $("#publishersTable").DataTable({
+                            destroy: true,
+                            searching: false
+                        });
+                    }
+                });
+            }
+
+            $("#searchName, #searchCountry").on("keyup", function () {
+                filterPublishers();
+            });
+        });
+
+    </script>
+}

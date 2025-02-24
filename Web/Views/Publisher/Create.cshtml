@@ -1,0 +1,181 @@
+﻿@using Core.DTOs
+@model PublisherDTO
+
+@{
+    ViewData["Title"] = "Create Publisher";
+}
+
+<h2 class="text-center my-4">@ViewData["Title"]</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card shadow-lg">
+            <div class="card-header bg-primary text-white">
+                <h4>Publisher Details</h4>
+            </div>
+            <div class="card-body">
+                <form id="createPublisherForm" novalidate>
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label">Name</label>
+                        <input asp-for="Name" id="Name" class="form-control" required />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Country" class="form-label">Country</label>
+                        <input asp-for="Country" id="Country" class="form-control" required />
+                        <span asp-validation-for="Country" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="FoundedYear" class="form-label">Founded Year</label>
+                        <input asp-for="FoundedYear" id="FoundedYear" type="number" class="form-control" required />
+                        <span asp-validation-for="FoundedYear" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Website" class="form-label">Website</label>
+                        <input asp-for="Website" id="Website" type="url" class="form-control" required />
+                        <span asp-validation-for="Website" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <input type="hidden" id="selectedBooks" name="selectedBooks" />
+                        <h5 class="mt-3">Selected Books:</h5>
+                        <ul id="selectedBooksList" class="list-group"></ul>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-success">Save</button>
+                        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow-lg">
+            <div class="card-header bg-secondary text-white">
+                <h4>Select Books</h4>
+            </div>
+            <div class="card-body">
+                <table id="booksTable" class="table table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Select</th>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Year</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var book in ViewBag.Books)
+                        {
+                            <tr>
+                                <td>
+                                    <input type="checkbox" class="bookCheckbox" value="@book.Id" data-title="@book.Title" />
+                                </td>
+                                <td>@book.Title</td>
+                                <td>@book.Author.Name</td>
+                                <td>@book.PublicationYear</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>  
+    </div>
+</div>
+
+@await Html.PartialAsync("Modals/_SuccessPublisherModal", "Publisher created successfully!")
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Initialize the Books table with DataTables
+            $("#booksTable").DataTable();
+
+            let selectedBooks = [];
+
+            // Manejo de selección de libros
+            $(".bookCheckbox").change(function () {
+                let bookId = $(this).val();
+                let bookTitle = $(this).data("title");
+
+                // Get today's date in "YYYY-MM-DD" format (for backend)
+                let today = new Date();
+                let year = today.getFullYear();
+                let month = String(today.getMonth() + 1).padStart(2, '0'); // Month starts at 0
+                let day = String(today.getDate()).padStart(2, '0');
+                let formattedDateForBackend = `${year}-${month}-${day}`; // Correct for API
+                let formattedDateForUI = `${day}/${month}/${year}`; // To display in the UI
+
+                if ($(this).is(":checked")) {
+                    selectedBooks.push({ bookId: bookId, PublishedDate: formattedDateForBackend });
+                    $("#selectedBooksList").append(`<li class="list-group-item" data-id="${bookId}">${bookTitle} - ${formattedDateForUI}</li>`);
+                } else {
+                    selectedBooks = selectedBooks.filter(book => book.bookId !== bookId);
+                    $(`#selectedBooksList li[data-id='${bookId}']`).remove();
+                }
+
+                $("#selectedBooks").val(JSON.stringify(selectedBooks)); // We save as JSON
+            });
+
+            // Handling form submission
+            $("#createPublisherForm").submit(function (e) {
+                e.preventDefault();
+
+                var isValid = true;
+                $("#createPublisherForm input[required]").each(function () {
+                    if (!$(this).val()) {
+                        isValid = false;
+                        $(this).addClass("is-invalid");
+                        $(this).next("span").text("This field is required.");
+                    } else {
+                        $(this).removeClass("is-invalid");
+                        $(this).next("span").text("");
+                    }
+                });
+
+                if (!isValid) return;
+
+                var formData = {
+                    Name: $("#Name").val(),
+                    Country: $("#Country").val(),
+                    FoundedYear: $("#FoundedYear").val(),
+                    Website: $("#Website").val(),
+                    BookPublishers: selectedBooks
+                };
+
+                $.ajax({
+                    url: '@Url.Action("Create", "Publisher")',
+                    type: 'POST',
+                    data: JSON.stringify(formData),
+                    contentType: 'application/json',
+                    success: function (response) {
+                        if (response.success) {
+                            $("#successPublisherModal").modal("show");
+                            $("#createPublisherForm")[0].reset();
+                            $("#selectedBooksList").empty();
+                            $(".bookCheckbox").prop("checked", false);
+                            selectedBooks = [];
+                        } else {
+                            alert("Error: " + response.message);
+                        }
+                    },
+                    error: function (xhr) {
+                        alert("Error creating publisher.");
+                        console.log(xhr.responseText);
+                    }
+                });
+            });
+        });
+
+    </script>
+
+}

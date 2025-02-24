@@ -1,0 +1,96 @@
+﻿@using Core.DTOs
+@model AuthorDTO
+
+@{
+    ViewData["Title"] = "Create Author";
+}
+
+<h2 class="text-center my-4">@ViewData["Title"]</h2>
+
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <form id="createAuthorForm" novalidate>
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label">Name</label>
+                <input asp-for="Name" id="Name" class="form-control" required />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Nationality" class="form-label">Nationality</label>
+                <input asp-for="Nationality" id="Nationality" class="form-control" required />
+                <span asp-validation-for="Nationality" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="BirthDate" class="form-label">Birth Date</label>
+                <input asp-for="BirthDate" id="BirthDate" type="date" class="form-control" required />
+                <span asp-validation-for="BirthDate" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Biography" class="form-label">Biography</label>
+                <textarea asp-for="Biography" id="Biography" class="form-control" rows="3" required></textarea>
+                <span asp-validation-for="Biography" class="text-danger"></span>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-success">Save</button>
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("Modals/_SuccessAuthorModal", "Author created successfully!")
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#createAuthorForm").submit(function (e) {
+                e.preventDefault();
+
+                var isValid = true;
+                $("#createAuthorForm input[required], #createAuthorForm textarea[required]").each(function () {
+                    if (!$(this).val()) {
+                        isValid = false;
+                        $(this).addClass("is-invalid");
+                        $(this).next("span").text("This field is required.");
+                    } else {
+                        $(this).removeClass("is-invalid");
+                        $(this).next("span").text("");
+                    }
+                });
+
+                if (!isValid) return;
+
+                var formData = {
+                    Name: $("#Name").val(),
+                    Nationality: $("#Nationality").val(),
+                    BirthDate: $("#BirthDate").val(),
+                    Biography: $("#Biography").val()
+                };
+
+                $.ajax({
+                    url: '@Url.Action("Create", "Author")',
+                    type: 'POST',
+                    data: $("#createAuthorForm").serialize(),
+                    success: function (response) {
+                        if (response.success) {
+                            $("#successAuthorModal").modal("show");
+                            $("#createAuthorForm")[0].reset();
+                        } else {
+                            alert("Error: " + response.message);
+                        }
+                    },
+                    error: function (xhr) {
+                        alert("Error creating author.");
+                        console.log(xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+}

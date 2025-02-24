@@ -1,0 +1,125 @@
+﻿@using Core.DTOs
+@using Core.Enums
+@model BookDTO
+
+@{
+    ViewData["Title"] = "Create Book";
+}
+
+<h2 class="text-center my-4">@ViewData["Title"]</h2>
+
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <form id="createBookForm" novalidate>
+            <div class="mb-3">
+                <label asp-for="Title" class="form-label">Title</label>
+                <input asp-for="Title" id="Title" class="form-control" required />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label for="AuthorId" class="form-label">Author</label>
+                <select id="AuthorId" name="AuthorId" class="form-control" required>
+                    <option value="">-- Select Author --</option>
+                </select>
+                <span class="text-danger"></span>
+            </div>
+
+
+            <div class="mb-3">
+                <label asp-for="Genre" class="form-label">Genre</label>
+                <select asp-for="Genre" id="Genre" class="form-control" required>
+                    <option value="">-- Select Genre --</option>
+                    @foreach (var genre in Enum.GetValues(typeof(Genre)))
+                    {
+                        <option value="@genre">@genre</option>
+                    }
+                </select>
+                <span asp-validation-for="Genre" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="PublicationYear" class="form-label">Publication Year</label>
+                <input asp-for="PublicationYear" id="PublicationYear" type="number" class="form-control" required />
+                <span asp-validation-for="PublicationYear" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ISBN" class="form-label">ISBN</label>
+                <input asp-for="ISBN" id="ISBN" class="form-control" required />
+                <span asp-validation-for="ISBN" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Pages" class="form-label">Pages</label>
+                <input asp-for="Pages" id="Pages" type="number" class="form-control" required />
+                <span asp-validation-for="Pages" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Price" class="form-label">Price</label>
+                <input asp-for="Price" id="Price" type="number" step="0.01" class="form-control" required />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-success">Save</button>
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("Modals/_SuccessBookModal", "Book created successfully!")
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Load list of authors dynamically
+            $.get("@Url.Action("GetAuthors", "Author")", function (data) {
+                let authorDropdown = $("#AuthorId");
+                data.forEach(author => {
+                    authorDropdown.append(new Option(author.name, author.id));
+                });
+            });
+
+            $("#createBookForm").submit(function (e) {
+                e.preventDefault();
+
+                var isValid = true;
+                $("#createBookForm input[required], #createBookForm select[required]").each(function () {
+                    if (!$(this).val()) {
+                        isValid = false;
+                        $(this).addClass("is-invalid");
+                        $(this).next("span").text("This field is required.");
+                    } else {
+                        $(this).removeClass("is-invalid");
+                        $(this).next("span").text("");
+                    }
+                });
+
+                if (!isValid) return;
+
+                $.ajax({
+                    url: '@Url.Action("Create", "Book")',
+                    type: 'POST',
+                    data: $("#createBookForm").serialize(),
+                    success: function (response) {
+                        if (response.success) {
+                            $("#successBookModal").modal("show");
+                            $("#createBookForm")[0].reset();
+                        } else {
+                            alert("Error: " + response.message);
+                        }
+                    },
+                    error: function (xhr) {
+                        alert("Error creating book.");
+                        console.log(xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+}

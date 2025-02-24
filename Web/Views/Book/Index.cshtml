@@ -1,0 +1,98 @@
+﻿@using Web.ViewModels
+@model IEnumerable<BookViewModel>
+
+@{
+    ViewData["Title"] = "List of Books";
+}
+
+<h2 class="text-center my-4">@ViewData["Title"]</h2>
+
+@if (!User.IsInRole("ViewAuthorsBooks") && !User.HasClaim("BooksCreate", "false"))
+{
+    <div class="mb-3">
+        <a asp-action="Create" class="btn btn-success">Add Book</a>
+    </div>
+}
+
+<div class="row mb-3">
+    <div class="col-md-3">
+        <input type="text" id="searchTitle" class="form-control" placeholder="Search by title..." />
+    </div>
+    <div class="col-md-3">
+        <input type="text" id="searchGenre" class="form-control" placeholder="Search by genre..." />
+    </div>
+    <div class="col-md-3">
+        <input type="number" id="minPrice" class="form-control" placeholder="Min price..." />
+    </div>
+    <div class="col-md-3">
+        <input type="number" id="maxPrice" class="form-control" placeholder="Max price..." />
+    </div>
+</div>
+
+<div id="booksTableContainer">
+    @await Html.PartialAsync("_BooksTable", Model)
+</div>
+
+@await Html.PartialAsync("Modals/_DeleteBookModal")
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+
+    <script>
+        var bookIdToDelete;
+
+        function openDeleteBookModal(bookId, bookTitle) {
+            bookIdToDelete = bookId;
+            $('#bookTitle').text(bookTitle);
+            $('#deleteBookModal').modal('show');
+        }
+
+        $("#confirmDeleteBook").click(function () {
+            $.ajax({
+                url: '/Book/Delete/' + bookIdToDelete,
+                type: 'DELETE',
+                success: function (response) {
+                    if (response.success) {
+                        $('#deleteBookModal').modal('hide');
+                        location.reload();
+                    } else {
+                        alert("Error: " + response.message);
+                    }
+                },
+                error: function (xhr) {
+                    alert("An error occurred while deleting the book.");
+                    console.log(xhr.responseText);
+                }
+            });
+        });
+
+        $(document).ready(function () {
+            $("#booksTable").DataTable({
+                destroy: true,
+                searching: false
+            });
+
+            $(".form-control").on("keyup change", function () {
+                let searchTitle = $("#searchTitle").val();
+                let searchGenre = $("#searchGenre").val();
+                let minPrice = $("#minPrice").val();
+                let maxPrice = $("#maxPrice").val();
+
+                $.ajax({
+                    url: "@Url.Action("Index", "Book")",
+                    type: "GET",
+                    data: { title: searchTitle, genre: searchGenre, minPrice: minPrice, maxPrice: maxPrice },
+                    success: function (data) {
+                        $("#booksTableContainer").html(data);
+                        $("#booksTable").DataTable({
+                            destroy: true,
+                            searching: false
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}
