@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "iH53gAF759qmSzqa8YmG2FsMCYFvRMRHYLoDt9yKFzHIQXYAnVxsQRYvxLrh2xnimGSypG/s7dj4xMBpaggQOA==",
+  "dgSpecHash": "4HZyjBOZWpPHMzkPCPAy/5ouim8BUL94MHZypTBSPtWPcMhsds5rwOjQ+bchWbYxBjbvPBaFQ6VnWfYXvsBLQQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\adria\\OneDrive\\Escritorio\\Git\\Library\\Web\\Web.csproj",
   "expectedPackageFiles": [
@@ -73,7 +73,6 @@
     "C:\\Users\\adria\\.nuget\\packages\\microsoft.aspnetcore.http.features\\2.3.0\\microsoft.aspnetcore.http.features.2.3.0.nupkg.sha512",
     "C:\\Users\\adria\\.nuget\\packages\\microsoft.aspnetcore.identity\\2.3.0\\microsoft.aspnetcore.identity.2.3.0.nupkg.sha512",
     "C:\\Users\\adria\\.nuget\\packages\\microsoft.aspnetcore.identity.entityframeworkcore\\8.0.13\\microsoft.aspnetcore.identity.entityframeworkcore.8.0.13.nupkg.sha512",
-    "C:\\Users\\adria\\.nuget\\packages\\microsoft.aspnetcore.identity.ui\\9.0.2\\microsoft.aspnetcore.identity.ui.9.0.2.nupkg.sha512",
     "C:\\Users\\adria\\.nuget\\packages\\microsoft.aspnetcore.mvc.razor.extensions\\6.0.0\\microsoft.aspnetcore.mvc.razor.extensions.6.0.0.nupkg.sha512",
     "C:\\Users\\adria\\.nuget\\packages\\microsoft.aspnetcore.mvc.razor.runtimecompilation\\8.0.13\\microsoft.aspnetcore.mvc.razor.runtimecompilation.8.0.13.nupkg.sha512",
     "C:\\Users\\adria\\.nuget\\packages\\microsoft.aspnetcore.razor.language\\6.0.24\\microsoft.aspnetcore.razor.language.6.0.24.nupkg.sha512",
