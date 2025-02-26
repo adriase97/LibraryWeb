@@ -20,8 +20,8 @@ namespace Web.Controllers
 
         #region Index
         // GET: BookController
-        [HttpGet]
         [Authorize(Roles = "Admin, AuthorsBooksPublisher, AuthorsBooks, ViewAuthorsBooks")]
+        [HttpGet]
         public async Task<ActionResult> Index(string? title, Genre? genre, decimal? minPrice, decimal? maxPrice)
         {
             if (User.HasClaim("BooksAccess", "false")) return RedirectToAction("AccessDenied", "Home");
@@ -48,8 +48,8 @@ namespace Web.Controllers
 
         #region Details
         // GET: BookController/Details/{id}
-        [HttpGet]
         [Authorize(Roles = "Admin, AuthorsBooksPublisher, AuthorsBooks, ViewAuthorsBooks")]
+        [HttpGet]
         public async Task<ActionResult> Details(int id)
         {
             if (User.HasClaim("BooksAccess", "false")) return RedirectToAction("AccessDenied", "Home");
@@ -62,16 +62,16 @@ namespace Web.Controllers
 
         #region Create
         // GET: BookController/Create
-        [HttpGet]
         [Authorize(Roles = "Admin, AuthorsBooksPublisher, AuthorsBooks")]
+        [HttpGet]
         public ActionResult Create()
         {
             if (User.HasClaim("BooksCreate", "false")) return RedirectToAction("AccessDenied", "Home");
             return View();
         }
 
-        [HttpPost]
         [Authorize(Roles = "Admin, AuthorsBooksPublisher, AuthorsBooks")]
+        [HttpPost]
         public async Task<ActionResult> Create(BookDTO bookDTO)
         {
             if (User.HasClaim("BooksCreate", "false")) return RedirectToAction("AccessDenied", "Home");
@@ -90,8 +90,8 @@ namespace Web.Controllers
 
         #region Edit
         // GET: BookController/Edit/{id}
-        [HttpGet]
         [Authorize(Roles = "Admin, AuthorsBooksPublisher, AuthorsBooks")]
+        [HttpGet]
         public async Task<ActionResult> Edit(int id)
         {
             if (User.HasClaim("BooksEdit", "false")) return RedirectToAction("AccessDenied", "Home");
@@ -104,8 +104,8 @@ namespace Web.Controllers
             return View(book);
         }
 
-        [HttpPut]
         [Authorize(Roles = "Admin, AuthorsBooksPublisher, AuthorsBooks")]
+        [HttpPut]
         public async Task<ActionResult> Edit(BookDTO bookDTO)
         {
             if (User.HasClaim("BooksEdit", "false")) return RedirectToAction("AccessDenied", "Home");
@@ -123,8 +123,8 @@ namespace Web.Controllers
 
         #region Delete
         // GET: BookController/Delete/{id}
-        [HttpDelete]
         [Authorize(Roles = "Admin, AuthorsBooksPublisher, AuthorsBooks")]
+        [HttpDelete]
         public async Task<ActionResult> Delete(int id)
         {
             if (User.HasClaim("BooksDelete", "false")) return RedirectToAction("AccessDenied", "Home");
