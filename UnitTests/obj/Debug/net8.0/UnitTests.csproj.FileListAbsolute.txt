@@ -635,3 +635,4 @@ C:\Users\adria\OneDrive\Escritorio\Git\Library\UnitTests\obj\Debug\net8.0\ref\Un
 C:\Users\adria\OneDrive\Escritorio\Git\Library\UnitTests\bin\Debug\net8.0\Castle.Core.dll
 C:\Users\adria\OneDrive\Escritorio\Git\Library\UnitTests\bin\Debug\net8.0\Moq.dll
 C:\Users\adria\OneDrive\Escritorio\Git\Library\UnitTests\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.InMemory.dll
+C:\Users\adria\OneDrive\Escritorio\Git\Library\UnitTests\obj\Debug\net8.0\UnitTests.sourcelink.json

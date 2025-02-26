@@ -2,7 +2,7 @@
 using Core.DTOs;
 using Core.Entities;
 using Core.Exceptions;
-using Core.Repositories;
+using Core.Interfaces;
 using Core.Services;
 using Moq;
 

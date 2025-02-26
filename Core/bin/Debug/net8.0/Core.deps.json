@@ -40,7 +40,6 @@
           "Microsoft.AspNetCore.Authentication.Cookies": "2.3.0",
           "Microsoft.AspNetCore.Identity": "2.3.0",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "8.0.13",
-          "Microsoft.AspNetCore.Identity.UI": "9.0.2",
           "Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation": "8.0.13",
           "Microsoft.EntityFrameworkCore": "9.0.2",
           "Microsoft.EntityFrameworkCore.InMemory": "9.0.2",
@@ -1065,7 +1064,6 @@
           "lib/net8.0/Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll": {}
         }
       },
-      "Microsoft.AspNetCore.Identity.UI/9.0.2": {},
       "Microsoft.AspNetCore.Mvc.Razor.Extensions/6.0.0": {
         "dependencies": {
           "Microsoft.AspNetCore.Razor.Language": "6.0.24",
@@ -5151,13 +5149,6 @@
       "sha512": "sha512-phnM62PIcJcPF3c4tnUjmsIGAJGEEDhAarALxKFpKy9V4nwOVv/vPbgjRSt5ix3Zk03Z93TlQrBHWFDHLV4AHw==",
       "path": "microsoft.aspnetcore.identity.entityframeworkcore/8.0.13",
       "hashPath": "microsoft.aspnetcore.identity.entityframeworkcore.8.0.13.nupkg.sha512"
-    },
-    "Microsoft.AspNetCore.Identity.UI/9.0.2": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-2oEQF1jRP7oM/PRKyhw8x1LxuP53xAXSwSMn+zPUH3J65M0wHmNpKTiSRVb4irErtrrK6OP8Y3KRQWiAyz3lbQ==",
-      "path": "microsoft.aspnetcore.identity.ui/9.0.2",
-      "hashPath": "microsoft.aspnetcore.identity.ui.9.0.2.nupkg.sha512"
     },
     "Microsoft.AspNetCore.Mvc.Razor.Extensions/6.0.0": {
       "type": "package",

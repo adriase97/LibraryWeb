@@ -572,3 +572,5 @@ C:\Users\adria\OneDrive\Escritorio\Git\Library\Web\bin\Debug\net8.0\ru\Microsoft
 C:\Users\adria\OneDrive\Escritorio\Git\Library\Web\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.Scripting.resources.dll
 C:\Users\adria\OneDrive\Escritorio\Git\Library\Web\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.Scripting.resources.dll
 C:\Users\adria\OneDrive\Escritorio\Git\Library\Web\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.Scripting.resources.dll
+C:\Users\adria\OneDrive\Escritorio\Git\Library\Web\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.InMemory.dll
+C:\Users\adria\OneDrive\Escritorio\Git\Library\Web\obj\Debug\net8.0\Web.sourcelink.json

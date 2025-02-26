@@ -290,3 +290,4 @@ C:\Users\adria\OneDrive\Escritorio\Git\Library\Core\bin\Debug\net8.0\refs\System
 C:\Users\adria\OneDrive\Escritorio\Git\Library\Core\bin\Debug\net8.0\refs\System.Xml.XPath.dll
 C:\Users\adria\OneDrive\Escritorio\Git\Library\Core\bin\Debug\net8.0\refs\System.Xml.XPath.XDocument.dll
 C:\Users\adria\OneDrive\Escritorio\Git\Library\Core\bin\Debug\net8.0\refs\WindowsBase.dll
+C:\Users\adria\OneDrive\Escritorio\Git\Library\Core\obj\Debug\net8.0\Core.sourcelink.json
