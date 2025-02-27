@@ -99,6 +99,36 @@ namespace UnitTests.Core.Services
         }
 
         [TestMethod]
+        public async Task UpdateAsync_ShouldCallRepository_WhenAuthorExists()
+        {
+            // Arrange
+            var authorDTO = new AuthorDTO { Id = 1, Name = "Albert Camus" };
+            var author = new Author { Id = 1, Name = "Albert Camus" };
+
+            _mockAuthorRepository.Setup(repo => repo.GetByIdAsync(1)).ReturnsAsync(author);
+            _mockMapper.Setup(mapper => mapper.Map(authorDTO, author));
+            _mockAuthorRepository.Setup(repo => repo.UpdateAsync(author)).Returns(Task.CompletedTask);
+
+            // Act
+            await _authorService.UpdateAsync(authorDTO);
+
+            // Assert
+            _mockAuthorRepository.Verify(repo => repo.UpdateAsync(It.IsAny<Author>()), Times.Once);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(AuthorException))]
+        public async Task UpdateAsync_ShouldThrowException_WhenAuthorDoesNotExist()
+        {
+            // Arrange
+            var authorDTO = new AuthorDTO { Id = 1, Name = "Albert Camus" };
+            _mockAuthorRepository.Setup(repo => repo.GetByIdAsync(1)).ReturnsAsync((Author)null);
+
+            // Act
+            await _authorService.UpdateAsync(authorDTO);
+        }
+
+        [TestMethod]
         public async Task DeleteAsync_ShouldCallRepository_WhenAuthorExists()
         {
             // Arrange
